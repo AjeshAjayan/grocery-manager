@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_manager/app/app_home_screen.dart';
 import 'package:grocery_manager/app_theme.dart';
@@ -8,123 +10,201 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+  final _form = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.white,
-      body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/bermuda-welcome.png"),
-              fit: BoxFit.cover,
+      body: Builder(
+        builder: (BuildContext context) => SafeArea(
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/bermuda-welcome.png"),
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: EdgeInsets.only(bottom: 30),
-                  child: FractionallySizedBox(
-                    widthFactor: 0.8,
-                    child: TextFormField(
-                      cursorColor: Colors.green,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Color(0x50FEFEFE),
-                        suffixIcon: Icon(
-                          Icons.person,
-                          color: Colors.green,
-                        ),
-                        border: const OutlineInputBorder(),
-                        labelText: "Username",
-                        labelStyle: TextStyle(color: Colors.green),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.green,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.green,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  child: FractionallySizedBox(
-                    widthFactor: 0.8,
-                    child: TextFormField(
-                      obscureText: true,
-                      cursorColor: Colors.green,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Color(0x50FFFFFF),
-                        suffixIcon: Icon(
-                          Icons.lock,
-                          color: Colors.green,
-                        ),
-                        border: OutlineInputBorder(),
-                        labelText: "Password",
-                        labelStyle: TextStyle(
-                          color: Colors.green,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.green,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.green,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: 30),
-                  child: FractionallySizedBox(
-                    widthFactor: 0.8,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: RaisedButton(
-                            color: Colors.green,
-                            child: Container(
-                              height: 50,
-                              child: Center(
-                                child: Text(
-                                  "Log in",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
+            child: Form(
+              key: _form,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(bottom: 30),
+                      child: FractionallySizedBox(
+                        widthFactor: 0.8,
+                        child: TextFormField(
+                          controller: usernameController,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Username is mandatory';
+                            }
+                            return null;
+                          },
+                          cursorColor: Colors.green,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Color(0x50FEFEFE),
+                            suffixIcon: Icon(
+                              Icons.person,
+                              color: Colors.green,
+                            ),
+                            border: const OutlineInputBorder(),
+                            labelText: "Username",
+                            labelStyle: TextStyle(color: Colors.green),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.green,
                               ),
                             ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => AppHomeScreen(),
-                                ),
-                              );
-                            },
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.green,
+                              ),
+                            ),
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                )
-              ],
+                    Container(
+                      child: FractionallySizedBox(
+                        widthFactor: 0.8,
+                        child: TextFormField(
+                          controller: passwordController,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Username is mandatory';
+                            }
+                            return null;
+                          },
+                          obscureText: true,
+                          cursorColor: Colors.green,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Color(0x50FFFFFF),
+                            suffixIcon: Icon(
+                              Icons.lock,
+                              color: Colors.green,
+                            ),
+                            border: OutlineInputBorder(),
+                            labelText: "Password",
+                            labelStyle: TextStyle(
+                              color: Colors.green,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.green,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.green,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(top: 30),
+                      child: FractionallySizedBox(
+                        widthFactor: 0.8,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: RaisedButton(
+                                color: Colors.green,
+                                child: Container(
+                                  height: 50,
+                                  child: Center(
+                                    child: Text(
+                                      "Log in",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  // verify
+                                  if (_form.currentState.validate()) {
+                                    FirebaseFirestore.instance
+                                        .collection('managers')
+                                        .where(
+                                          'username',
+                                          isEqualTo: usernameController.text,
+                                        )
+                                        .where(
+                                          'password',
+                                          isEqualTo: passwordController.text,
+                                        )
+                                        .get()
+                                        .then((QuerySnapshot querySnapshot) {
+                                      if (querySnapshot.docs.length > 0 &&
+                                          querySnapshot.docs.first.exists) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => AppHomeScreen(),
+                                          ),
+                                        );
+                                      } else {
+                                        snackBar(context, 'No such user');
+                                      }
+                                    });
+                                  } else {
+                                    snackBar(
+                                      context,
+                                      'Fill all mandaory fields',
+                                    );
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
           ),
         ),
       ),
     );
   }
+}
+
+void snackBar(context, text) {
+  Scaffold.of(context).showSnackBar(
+    SnackBar(
+      backgroundColor: Colors.green[300],
+      content: Expanded(
+        child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Container(
+                  child: Icon(Icons.warning),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Container(
+                  child: Text(text),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
 }

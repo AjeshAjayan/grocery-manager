@@ -1,7 +1,10 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:grocery_manager/app/app_home_screen.dart';
+import 'package:grocery_manager/app/models/user_model.dart';
 import 'package:grocery_manager/app_theme.dart';
 import 'package:grocery_manager/login.dart';
 
@@ -31,6 +34,7 @@ class MyApp extends StatelessWidget {
     return FutureBuilder(
         future: _initialization,
         builder: (context, snapshot) {
+
           // Check for errors
           if (snapshot.hasError) {
             return Center(
@@ -39,7 +43,7 @@ class MyApp extends StatelessWidget {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // some meassage
+            // some massage
           }
 
           // Once complete, show your application
@@ -53,15 +57,13 @@ class MyApp extends StatelessWidget {
                 platform: TargetPlatform.iOS,
                 visualDensity: VisualDensity.adaptivePlatformDensity,
               ),
-              // home: NavigationHomeScreen(),
-              home: Login(),
+              home: AppHomeScreen(),
+              // home: Login(),
             );
           }
 
           // Otherwise, show something whilst waiting for initialization to complete
-          return Center(
-            child: Text("please wait"),
-          );
+          return Center();
         });
   }
 }

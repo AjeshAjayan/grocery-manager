@@ -86,4 +86,13 @@ class FitnessAppTheme {
     letterSpacing: 0.2,
     color: lightText, // was lightText
   );
+
+  static const TextStyle commonTextStyle = TextStyle(
+    // Caption -> caption
+    fontFamily: fontName,
+    fontWeight: FontWeight.w400,
+    fontSize: 18,
+    letterSpacing: 0.2,
+    color: FitnessAppTheme.nearlyBlack, // was lightText
+  );
 }

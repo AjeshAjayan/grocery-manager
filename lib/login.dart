@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_manager/app/app_home_screen.dart';
@@ -54,7 +55,7 @@ class _LoginState extends State<Login> {
                               color: Colors.green,
                             ),
                             border: const OutlineInputBorder(),
-                            labelText: "Username",
+                            labelText: "Email",
                             labelStyle: TextStyle(color: Colors.green),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
@@ -77,7 +78,7 @@ class _LoginState extends State<Login> {
                           controller: passwordController,
                           validator: (value) {
                             if (value.isEmpty) {
-                              return 'Username is mandatory';
+                              return 'Email is mandatory';
                             }
                             return null;
                           },
@@ -129,37 +130,36 @@ class _LoginState extends State<Login> {
                                     ),
                                   ),
                                 ),
-                                onPressed: () {
+                                onPressed: () async {
                                   // verify
                                   if (_form.currentState.validate()) {
-                                    FirebaseFirestore.instance
-                                        .collection('managers')
-                                        .where(
-                                          'username',
-                                          isEqualTo: usernameController.text,
-                                        )
-                                        .where(
-                                          'password',
-                                          isEqualTo: passwordController.text,
-                                        )
-                                        .get()
-                                        .then((QuerySnapshot querySnapshot) {
-                                      if (querySnapshot.docs.length > 0 &&
-                                          querySnapshot.docs.first.exists) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => AppHomeScreen(),
-                                          ),
-                                        );
+
+                                    try {
+                                      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                                          email: usernameController.text.trim(),
+                                          password: passwordController.text.trim(),
+                                      );
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => AppHomeScreen(),
+                                        ),
+                                      );
+                                    } catch(e) {
+                                      if (e.code == 'user-not-found') {
+                                        snackBar(context, 'No user found for that email.');
+                                      } else if (e.code == 'wrong-password') {
+                                        snackBar(context, 'Wrong password provided for that user.');
+                                      } else if (e.code == 'invalid-email') {
+                                        snackBar(context, 'Invalid email');
                                       } else {
-                                        snackBar(context, 'No such user');
+                                        snackBar(context, 'Something went wrong');
                                       }
-                                    });
+                                    }
                                   } else {
                                     snackBar(
                                       context,
-                                      'Fill all mandaory fields',
+                                      'Fill all mandatory fields',
                                     );
                                   }
                                 },

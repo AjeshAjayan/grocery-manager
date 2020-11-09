@@ -19,7 +19,6 @@ class _AreaListViewState extends State<AreaListView>
   List<String> areaListData = <String>[
     'assets/app_images/area1.png',
     'assets/app_images/area2.png',
-    'assets/app_images/area3.png',
     'assets/app_images/area1.png',
   ];
 

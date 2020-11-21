@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'package:grocery_manager/app/models/user_model.dart';
 import 'package:grocery_manager/app/ui_view/area_list_view.dart';
 import 'package:grocery_manager/app/ui_view/title_view.dart';
+import 'package:grocery_manager/app/widgets/linear_progress_bar.dart';
 import 'package:grocery_manager/app/widgets/profile_cards.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -35,11 +35,18 @@ class _ProfileHomeState extends State<ProfileHome>
   final ScrollController scrollController = ScrollController();
   double topBarOpacity = 0.0;
   final imagePicker = ImagePicker();
-  File _image;
-  String proPicPath = authUser.photoURL;
+  NetworkImage proPicProvider;
+  Animation<double> _profilePictureAnimation;
 
   @override
   void initState() {
+    this._profilePictureAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(
+        widget.animationController
+    );
+    updateProPicState(authUser.photoURL);
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController,
@@ -87,6 +94,7 @@ class _ProfileHomeState extends State<ProfileHome>
             final user = snapshot.data.docs.first.data();
             return ProfileCard(
               displayText: user['firstname'] + ' ' + user['lastname'],
+              animationController: widget.animationController,
             );
           }
 
@@ -105,7 +113,9 @@ class _ProfileHomeState extends State<ProfileHome>
           if (snapshot.connectionState == ConnectionState.done) {
             final user = snapshot.data.docs.first.data();
             return ProfileCard(
-                displayText: user['address'] + ', ' + user['contctno1']);
+                displayText: user['address'] + ', ' + user['contctno1'],
+              animationController: widget.animationController,
+            );
           }
           return Container();
         },
@@ -123,6 +133,7 @@ class _ProfileHomeState extends State<ProfileHome>
             final user = snapshot.data.docs.first.data();
             return ProfileCard(
               displayText: user['district'] + ', ' + user['postal'].toString(),
+              animationController: widget.animationController,
             );
           }
           return Container();
@@ -276,44 +287,63 @@ class _ProfileHomeState extends State<ProfileHome>
   }
 
   Widget profilePicture() {
-    if (proPicPath == null) {
-      return Center(
-        child: CircleAvatar(
-          radius: 50,
-          backgroundColor: FitnessAppTheme.nearlyWhite,
-          child: InkWell(
-            splashColor: FitnessAppTheme.nearlyDarkBlue,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            onTap: () async {
-              // upload new profile picture
-              selectGalleryOrCamera();
-              // await getImage();
-            },
-            child: Image(
-              image: AssetImage('assets/app_images/user.png'),
+    return AnimatedBuilder(
+      animation: widget.animationController,
+      builder: (BuildContext context, Widget child) {
+        if (proPicProvider == null) {
+          return FadeTransition(
+            opacity: _profilePictureAnimation,
+            child: Center(
+              child: CircleAvatar(
+                radius: 50,
+                backgroundColor: FitnessAppTheme.nearlyWhite,
+                child: InkWell(
+                  splashColor: FitnessAppTheme.nearlyDarkBlue,
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  onTap: selectGalleryOrCamera,
+                  child: Image(
+                    image: AssetImage('assets/app_images/user.png'),
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      );
+          );
+        } else {
+          return FadeTransition(
+            opacity: _profilePictureAnimation,
+            child: Center(
+              child: InkWell(
+                splashColor: FitnessAppTheme.nearlyDarkBlue,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                onTap: selectGalleryOrCamera,
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundColor: FitnessAppTheme.nearlyWhite,
+                  backgroundImage: proPicProvider,
+                ),
+              ),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  void updateProPicState(imageUri) {
+    if (proPicProvider == null) {
+      setState(() {
+        proPicProvider = NetworkImage(authUser.photoURL);
+      });
     } else {
-      return Center(
-        child: CircleAvatar(
-          radius: 50,
-          backgroundColor: FitnessAppTheme.nearlyWhite,
-          child: InkWell(
-            splashColor: FitnessAppTheme.nearlyDarkBlue,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            onTap: () async {
-              // upload new profile picture
-              selectGalleryOrCamera();
-              //await getImage();
-            },
-            child: Image(
-              image: AssetImage('assets/app_images/user.png'),
-            ),
-          ),
-        ),
-      );
+      proPicProvider.evict().then((bool success) {
+        if (success) {
+          print('Image removed');
+          setState(() {
+            proPicProvider =
+                NetworkImage('https://static.toiimg.com/photo/72975551.cms');
+          });
+        }
+      });
     }
   }
 
@@ -329,8 +359,9 @@ class _ProfileHomeState extends State<ProfileHome>
                 InkWell(
                   splashColor: FitnessAppTheme.nearlyDarkBlue,
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  onTap: () {
-                    getImage(ImageSource.camera);
+                  onTap: () async {
+                    final imageUri = await getImage(ImageSource.camera);
+                    updateProPicState(imageUri);
                   },
                   child: Image(
                     image: AssetImage('assets/app_images/camera.png'),
@@ -339,8 +370,13 @@ class _ProfileHomeState extends State<ProfileHome>
                 InkWell(
                   splashColor: FitnessAppTheme.nearlyDarkBlue,
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  onTap: () {
-                    getImage(ImageSource.gallery);
+                  onTap: () async {
+                    try {
+                      final imageUri = await getImage(ImageSource.gallery);
+                      updateProPicState(imageUri);
+                    } catch (e) {
+                      print('ERROR $e');
+                    }
                   },
                   child: Image(
                     image: AssetImage('assets/app_images/gallery_2.png'),
@@ -357,25 +393,30 @@ class _ProfileHomeState extends State<ProfileHome>
 
   Future getImage(ImageSource source) async {
     try {
+      String imageUri;
+      LinearProgressBar.show.value = true;
+
       final pickedImage = await imagePicker.getImage(source: source);
       Navigator.pop(context);
       if (pickedImage != null) {
-        final FirebaseStorage storage = FirebaseStorage.instance
-            .ref('gs://grocery-app-6863f.appspot.com/')
-            .storage;
-        final uploadTask = storage
+        // find extension
+        RegExp exp = new RegExp(r"[^.]+$");
+        String imageExtension = exp.stringMatch(pickedImage.path);
+
+        final FirebaseStorage storage = FirebaseStorage.instance.ref().storage;
+        final uploadTask = await storage
             .ref()
-            .child('managers/profile_pictures/${authUser.uid}.png')
+            .child('managers/profile_pictures/${authUser.uid}.$imageExtension')
             .putFile(File(pickedImage.path));
+        imageUri = await uploadTask.ref.getDownloadURL();
         await FirebaseAuth.instance.currentUser.updateProfile(
-          photoURL:
-              'gs://grocery-app-6863f.appspot.com/managers/profile_pictures/${authUser.uid}.png',
+          photoURL: imageUri,
         );
-        setState(() {
-          proPicPath = pickedImage.path;
-        });
       }
+      LinearProgressBar.show.value = false;
+      return imageUri;
     } catch (e) {
+      LinearProgressBar.show.value = false;
       print('ERROR: $e');
     }
   }

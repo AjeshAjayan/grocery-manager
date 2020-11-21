@@ -6,6 +6,7 @@ import 'package:grocery_manager/app/models/user_model.dart';
 import 'package:grocery_manager/app/my_dairy/dashboard.dart';
 import 'package:grocery_manager/app/training/training_screen.dart';
 import 'package:grocery_manager/app/profile_home.dart';
+import 'package:grocery_manager/app/widgets/linear_progress_bar.dart';
 import '../login.dart';
 import 'home_theme.dart';
 
@@ -75,6 +76,7 @@ class _AppHomeScreenState extends State<AppHomeScreen>
                 children: <Widget>[
                   tabBody,
                   bottomBar(),
+                  LinearProgressBar()
                 ],
               );
             }

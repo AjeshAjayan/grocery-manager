@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:grocery_manager/app/home_theme.dart';
 import 'package:grocery_manager/app/models/user_model.dart';
+import 'package:grocery_manager/app/shop_details.dart';
 import 'package:grocery_manager/app/widgets/shop_card.dart';
 
 class ShopListScreen extends StatefulWidget {
@@ -128,7 +129,8 @@ class _ShopListScreenState extends State<ShopListScreen>
               child: FutureBuilder(
                   future: this
                       .shopCollection
-                      .where('subAdministrativeArea', isEqualTo: AuthUser.district)
+                      .where('subAdministrativeArea',
+                          isEqualTo: AuthUser.district)
                       .get(),
                   builder: (context, snapshots) {
                     if (snapshots.connectionState == ConnectionState.done &&
@@ -139,7 +141,8 @@ class _ShopListScreenState extends State<ShopListScreen>
                             child: Center(
                               child: Image(
                                 fit: BoxFit.cover,
-                                image: AssetImage('assets/app_images/no_shops.png'),
+                                image: AssetImage(
+                                    'assets/app_images/no_shops.png'),
                               ),
                             ),
                           ),
@@ -149,7 +152,13 @@ class _ShopListScreenState extends State<ShopListScreen>
                               width: MediaQuery.of(context).size.width,
                               child: Row(
                                 children: [
-                                  Text('No shops found..!', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
+                                  Text(
+                                    'No shops found..!',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ],
                                 mainAxisAlignment: MainAxisAlignment.center,
                               ),
@@ -271,11 +280,23 @@ class _ShopListScreenState extends State<ShopListScreen>
               doc.data()['addressLineTwo'].toString().toLowerCase()) ||
           regExp.hasMatch(doc.data()['postalCode'].toString().toLowerCase())) {
         shopCards.add(
-          ShopCard(
-            connectionState: snapshots.connectionState,
-            shop: snapshots.connectionState == ConnectionState.done
-                ? doc.data()
-                : '',
+          InkWell(
+            onTap: () {
+              // show dialog
+              showDialog(
+                context: context,
+                child: AlertDialog(
+                  content: ShopDetails(),
+                ),
+              );
+            },
+            splashColor: HomeTheme.primarySplashColor,
+            child: ShopCard(
+              connectionState: snapshots.connectionState,
+              shop: snapshots.connectionState == ConnectionState.done
+                  ? doc.data()
+                  : '',
+            ),
           ),
         );
       }

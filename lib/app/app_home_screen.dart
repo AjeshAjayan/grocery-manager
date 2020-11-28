@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_manager/app/bottom_bar_view.dart';
@@ -5,7 +6,6 @@ import 'package:grocery_manager/app/models/tabIcon_data.dart';
 import 'package:grocery_manager/app/models/user_model.dart';
 import 'package:grocery_manager/app/my_dairy/dashboard.dart';
 import 'package:grocery_manager/app/shop_list_screen.dart';
-import 'package:grocery_manager/app/training/training_screen.dart';
 import 'package:grocery_manager/app/profile_home.dart';
 import 'package:grocery_manager/app/widgets/linear_progress_bar.dart';
 import '../login.dart';
@@ -28,10 +28,17 @@ class _AppHomeScreenState extends State<AppHomeScreen>
 
   @override
   void initState() {
-    FirebaseAuth.instance.authStateChanges().listen((user) {
+    FirebaseAuth.instance.authStateChanges().listen((user) async {
       if (user != null) {
+        final QuerySnapshot userSnap = await FirebaseFirestore.instance
+            .collection('managers')
+            .where('uid')
+            .get();
+
         setState(() {
-          authUser = user;
+          AuthUser.user = user;
+          AuthUser.district = userSnap.docs.first.data()['district']
+            .toString();
         });
         print('sign in');
       } else {

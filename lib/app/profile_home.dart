@@ -29,7 +29,7 @@ class _ProfileHomeState extends State<ProfileHome>
   Animation<double> topBarAnimation;
   Future<QuerySnapshot> userQuery = FirebaseFirestore.instance
       .collection('managers')
-      .where('uid', isEqualTo: authUser.uid)
+      .where('uid', isEqualTo: AuthUser.user.uid)
       .get();
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
@@ -46,7 +46,7 @@ class _ProfileHomeState extends State<ProfileHome>
     ).animate(
         widget.animationController
     );
-    updateProPicState(authUser.photoURL);
+    updateProPicState(AuthUser.user.photoURL);
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
             parent: widget.animationController,
@@ -332,7 +332,7 @@ class _ProfileHomeState extends State<ProfileHome>
   void updateProPicState(imageUri) {
     if (proPicProvider == null) {
       setState(() {
-        proPicProvider = NetworkImage(authUser.photoURL);
+        proPicProvider = NetworkImage(AuthUser.user.photoURL);
       });
     } else {
       proPicProvider.evict().then((bool success) {
@@ -406,7 +406,7 @@ class _ProfileHomeState extends State<ProfileHome>
         final FirebaseStorage storage = FirebaseStorage.instance.ref().storage;
         final uploadTask = await storage
             .ref()
-            .child('managers/profile_pictures/${authUser.uid}.$imageExtension')
+            .child('managers/profile_pictures/${AuthUser.user.uid}.$imageExtension')
             .putFile(File(pickedImage.path));
         imageUri = await uploadTask.ref.getDownloadURL();
         await FirebaseAuth.instance.currentUser.updateProfile(

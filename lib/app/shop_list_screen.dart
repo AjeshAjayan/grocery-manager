@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:grocery_manager/app/home_theme.dart';
+import 'package:grocery_manager/app/models/user_model.dart';
 import 'package:grocery_manager/app/widgets/shop_card.dart';
 
 class ShopListScreen extends StatefulWidget {
@@ -125,8 +126,38 @@ class _ShopListScreenState extends State<ShopListScreen>
             ),
             Expanded(
               child: FutureBuilder(
-                  future: this.shopCollection.get(),
+                  future: this
+                      .shopCollection
+                      .where('subAdministrativeArea', isEqualTo: AuthUser.district)
+                      .get(),
                   builder: (context, snapshots) {
+                    if (snapshots.connectionState == ConnectionState.done &&
+                        snapshots.data.docs.length == 0) {
+                      return Stack(
+                        children: [
+                          Container(
+                            child: Center(
+                              child: Image(
+                                fit: BoxFit.cover,
+                                image: AssetImage('assets/app_images/no_shops.png'),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 80,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              child: Row(
+                                children: [
+                                  Text('No shops found..!', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
+                                ],
+                                mainAxisAlignment: MainAxisAlignment.center,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }
                     return GridView.count(
                       controller: scrollController,
                       primary: false,
@@ -227,20 +258,24 @@ class _ShopListScreenState extends State<ShopListScreen>
     String regex = shopFilterRegex.trim().toLowerCase();
     RegExp regExp = new RegExp("$regex");
 
-    // generate shop list
-    for (var doc in snapshots.data.docs) {
+    final dummyArray = [1, 2, 3, 4];
 
+    // generate shop list
+    for (var doc in snapshots.data != null ? snapshots.data.docs : dummyArray) {
       // check filter
-      if(regex == '' ||
+      if (regex == '' ||
           regExp.hasMatch(doc.data()['shop_name'].toString().toLowerCase()) ||
-          regExp.hasMatch(doc.data()['addressLineOne'].toString().toLowerCase()) ||
-          regExp.hasMatch(doc.data()['addressLineTwo'].toString().toLowerCase()) ||
-          regExp.hasMatch(doc.data()['postalCode'].toString().toLowerCase())
-      ) {
+          regExp.hasMatch(
+              doc.data()['addressLineOne'].toString().toLowerCase()) ||
+          regExp.hasMatch(
+              doc.data()['addressLineTwo'].toString().toLowerCase()) ||
+          regExp.hasMatch(doc.data()['postalCode'].toString().toLowerCase())) {
         shopCards.add(
           ShopCard(
             connectionState: snapshots.connectionState,
-            shop: doc.data(),
+            shop: snapshots.connectionState == ConnectionState.done
+                ? doc.data()
+                : '',
           ),
         );
       }

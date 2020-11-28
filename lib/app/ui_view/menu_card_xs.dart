@@ -28,7 +28,7 @@ class MenuCardXs extends StatelessWidget {
                   left: 24, right: 24, top: 16, bottom: 18),
               child: Container(
                 decoration: BoxDecoration(
-                  color: FitnessAppTheme.white,
+                  color: HomeTheme.white,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(8.0),
                       bottomLeft: Radius.circular(8.0),
@@ -36,7 +36,7 @@ class MenuCardXs extends StatelessWidget {
                       topRight: Radius.circular(68.0)),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                        color: FitnessAppTheme.grey.withOpacity(0.2),
+                        color: HomeTheme.grey.withOpacity(0.2),
                         offset: Offset(1.1, 1.1),
                         blurRadius: 10.0),
                   ],
@@ -61,11 +61,11 @@ class MenuCardXs extends StatelessWidget {
                               title,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontFamily: FitnessAppTheme.fontName,
+                                  fontFamily: HomeTheme.fontName,
                                   fontWeight: FontWeight.w500,
                                   fontSize: 16,
                                   letterSpacing: -0.1,
-                                  color: FitnessAppTheme.darkText),
+                                  color: HomeTheme.darkText),
                             ),
                           ),
                           Row(
@@ -83,10 +83,10 @@ class MenuCardXs extends StatelessWidget {
                                       '206.8',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        fontFamily: FitnessAppTheme.fontName,
+                                        fontFamily: HomeTheme.fontName,
                                         fontWeight: FontWeight.w600,
                                         fontSize: 32,
-                                        color: FitnessAppTheme.nearlyDarkBlue,
+                                        color: HomeTheme.nearlyDarkBlue,
                                       ),
                                     ),
                                   ),
@@ -97,11 +97,11 @@ class MenuCardXs extends StatelessWidget {
                                       'Ibs',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        fontFamily: FitnessAppTheme.fontName,
+                                        fontFamily: HomeTheme.fontName,
                                         fontWeight: FontWeight.w500,
                                         fontSize: 18,
                                         letterSpacing: -0.2,
-                                        color: FitnessAppTheme.nearlyDarkBlue,
+                                        color: HomeTheme.nearlyDarkBlue,
                                       ),
                                     ),
                                   ),
@@ -116,7 +116,7 @@ class MenuCardXs extends StatelessWidget {
                                     children: <Widget>[
                                       Icon(
                                         Icons.access_time,
-                                        color: FitnessAppTheme.grey
+                                        color: HomeTheme.grey
                                             .withOpacity(0.5),
                                         size: 16,
                                       ),
@@ -128,11 +128,11 @@ class MenuCardXs extends StatelessWidget {
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontFamily:
-                                                FitnessAppTheme.fontName,
+                                                HomeTheme.fontName,
                                             fontWeight: FontWeight.w500,
                                             fontSize: 14,
                                             letterSpacing: 0.0,
-                                            color: FitnessAppTheme.grey
+                                            color: HomeTheme.grey
                                                 .withOpacity(0.5),
                                           ),
                                         ),
@@ -146,11 +146,11 @@ class MenuCardXs extends StatelessWidget {
                                       'InBody SmartScale',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        fontFamily: FitnessAppTheme.fontName,
+                                        fontFamily: HomeTheme.fontName,
                                         fontWeight: FontWeight.w500,
                                         fontSize: 12,
                                         letterSpacing: 0.0,
-                                        color: FitnessAppTheme.nearlyDarkBlue,
+                                        color: HomeTheme.nearlyDarkBlue,
                                       ),
                                     ),
                                   ),

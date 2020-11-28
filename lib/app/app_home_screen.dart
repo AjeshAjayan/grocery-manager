@@ -4,6 +4,7 @@ import 'package:grocery_manager/app/bottom_bar_view.dart';
 import 'package:grocery_manager/app/models/tabIcon_data.dart';
 import 'package:grocery_manager/app/models/user_model.dart';
 import 'package:grocery_manager/app/my_dairy/dashboard.dart';
+import 'package:grocery_manager/app/shop_list_screen.dart';
 import 'package:grocery_manager/app/training/training_screen.dart';
 import 'package:grocery_manager/app/profile_home.dart';
 import 'package:grocery_manager/app/widgets/linear_progress_bar.dart';
@@ -22,13 +23,13 @@ class _AppHomeScreenState extends State<AppHomeScreen>
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
 
   Widget tabBody = Container(
-    color: FitnessAppTheme.background,
+    color: HomeTheme.background,
   );
 
   @override
   void initState() {
     FirebaseAuth.instance.authStateChanges().listen((user) {
-      if(user != null) {
+      if (user != null) {
         setState(() {
           authUser = user;
         });
@@ -63,7 +64,7 @@ class _AppHomeScreenState extends State<AppHomeScreen>
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: FitnessAppTheme.background,
+      color: HomeTheme.background,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: FutureBuilder<bool>(
@@ -73,11 +74,7 @@ class _AppHomeScreenState extends State<AppHomeScreen>
               return const SizedBox();
             } else {
               return Stack(
-                children: <Widget>[
-                  tabBody,
-                  bottomBar(),
-                  LinearProgressBar()
-                ],
+                children: <Widget>[tabBody, bottomBar(), LinearProgressBar()],
               );
             }
           },
@@ -101,7 +98,7 @@ class _AppHomeScreenState extends State<AppHomeScreen>
           tabIconsList: tabIconsList,
           addClick: () {},
           changeIndex: (int index) {
-            if (index == 0 || index == 2) {
+            if (index == 0) {
               animationController.reverse().then<dynamic>((data) {
                 if (!mounted) {
                   return;
@@ -116,18 +113,31 @@ class _AppHomeScreenState extends State<AppHomeScreen>
                   return;
                 }
                 setState(() {
-                  tabBody =
-                      TrainingScreen(animationController: animationController);
+                  tabBody = ShopListScreen(
+                    animationController: animationController,
+                  );
                 });
               });
-            } else if(index == 3) {
+            } else if (index == 2) {
               animationController.reverse().then<dynamic>((data) {
                 if (!mounted) {
                   return;
                 }
                 setState(() {
-                  tabBody =
-                      ProfileHome(animationController: animationController,);
+                  tabBody = ShopListScreen(
+                    animationController: animationController,
+                  );
+                });
+              });
+            } else if (index == 3) {
+              animationController.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody = ProfileHome(
+                    animationController: animationController,
+                  );
                 });
               });
             }

@@ -148,11 +148,11 @@ class MenuView extends StatelessWidget {
                               mealsListData.titleTxt,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontFamily: FitnessAppTheme.fontName,
+                                fontFamily: HomeTheme.fontName,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                                 letterSpacing: 0.2,
-                                color: FitnessAppTheme.white,
+                                color: HomeTheme.white,
                               ),
                             ),
                             Row(
@@ -163,11 +163,11 @@ class MenuView extends StatelessWidget {
                                   mealsListData.nos.toString(),
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontFamily: FitnessAppTheme.fontName,
+                                    fontFamily: HomeTheme.fontName,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 24,
                                     letterSpacing: 0.2,
-                                    color: FitnessAppTheme.white,
+                                    color: HomeTheme.white,
                                   ),
                                 ),
                                 Padding(
@@ -176,11 +176,11 @@ class MenuView extends StatelessWidget {
                                   child: Text(
                                     'nos',
                                     style: TextStyle(
-                                      fontFamily: FitnessAppTheme.fontName,
+                                      fontFamily: HomeTheme.fontName,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 10,
                                       letterSpacing: 0.2,
-                                      color: FitnessAppTheme.white,
+                                      color: HomeTheme.white,
                                     ),
                                   ),
                                 ),
@@ -198,7 +198,7 @@ class MenuView extends StatelessWidget {
                       width: 84,
                       height: 84,
                       decoration: BoxDecoration(
-                        color: FitnessAppTheme.nearlyWhite.withOpacity(0.2),
+                        color: HomeTheme.nearlyWhite.withOpacity(0.2),
                         shape: BoxShape.circle,
                       ),
                     ),

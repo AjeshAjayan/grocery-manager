@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class FitnessAppTheme {
-  FitnessAppTheme._();
+class HomeTheme {
+  HomeTheme._();
   static const Color nearlyWhite = Color(0xFFFAFAFA);
   static const Color white = Color(0xFFFFFFFF);
   static const Color background = Color(0xFFF2F3F8);
@@ -19,6 +19,8 @@ class FitnessAppTheme {
   static const Color dismissibleBackground = Color(0xFF364A54);
   static const Color spacer = Color(0xFFF2F2F2);
   static const String fontName = 'Roboto';
+
+  static const Color nearlyLiteDarkBlue = Color(0x702633C5);
 
   static const TextTheme textTheme = TextTheme(
     headline4: display1,
@@ -93,6 +95,51 @@ class FitnessAppTheme {
     fontWeight: FontWeight.w400,
     fontSize: 18,
     letterSpacing: 0.2,
-    color: FitnessAppTheme.nearlyBlack, // was lightText
+    color: HomeTheme.nearlyBlack, // was lightText
   );
+
+  static final List<BoxShadow> boxShadow = [
+    BoxShadow(
+      color: HomeTheme.grey.withOpacity(0.4),
+      offset: const Offset(1.1, 1.1),
+      blurRadius: 10.0,
+    ),
+  ];
+
+  static Widget buildBlueOutlinedInput(
+      {String labelText,
+      TextEditingController controller,
+      String hintText,
+      TextInputType textInputType}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextFormField(
+        style: TextStyle(
+          color: HomeTheme.nearlyDarkBlue,
+        ),
+        keyboardType: textInputType,
+        controller: controller,
+        cursorColor: HomeTheme.nearlyDarkBlue,
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: TextStyle(color: HomeTheme.nearlyLiteDarkBlue),
+          border: OutlineInputBorder(),
+          labelText: labelText,
+          labelStyle: TextStyle(
+            color: HomeTheme.nearlyDarkBlue,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: HomeTheme.nearlyDarkBlue,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: HomeTheme.nearlyDarkBlue,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

@@ -174,7 +174,7 @@ class _ProfileHomeState extends State<ProfileHome>
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: FitnessAppTheme.background,
+      color: HomeTheme.background,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Stack(
@@ -230,13 +230,13 @@ class _ProfileHomeState extends State<ProfileHome>
                     0.0, 30 * (1.0 - topBarAnimation.value), 0.0),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: FitnessAppTheme.white.withOpacity(topBarOpacity),
+                    color: HomeTheme.white.withOpacity(topBarOpacity),
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(32.0),
                     ),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                          color: FitnessAppTheme.grey
+                          color: HomeTheme.grey
                               .withOpacity(0.4 * topBarOpacity),
                           offset: const Offset(1.1, 1.1),
                           blurRadius: 10.0),
@@ -263,11 +263,11 @@ class _ProfileHomeState extends State<ProfileHome>
                                   'Profile',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
-                                    fontFamily: FitnessAppTheme.fontName,
+                                    fontFamily: HomeTheme.fontName,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 22 + 6 - 6 * topBarOpacity,
                                     letterSpacing: 1.2,
-                                    color: FitnessAppTheme.darkerText,
+                                    color: HomeTheme.darkerText,
                                   ),
                                 ),
                               ),
@@ -296,9 +296,9 @@ class _ProfileHomeState extends State<ProfileHome>
             child: Center(
               child: CircleAvatar(
                 radius: 50,
-                backgroundColor: FitnessAppTheme.nearlyWhite,
+                backgroundColor: HomeTheme.nearlyWhite,
                 child: InkWell(
-                  splashColor: FitnessAppTheme.nearlyDarkBlue,
+                  splashColor: HomeTheme.nearlyDarkBlue,
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                   onTap: selectGalleryOrCamera,
                   child: Image(
@@ -313,12 +313,12 @@ class _ProfileHomeState extends State<ProfileHome>
             opacity: _profilePictureAnimation,
             child: Center(
               child: InkWell(
-                splashColor: FitnessAppTheme.nearlyDarkBlue,
+                splashColor: HomeTheme.nearlyDarkBlue,
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 onTap: selectGalleryOrCamera,
                 child: CircleAvatar(
                   radius: 50,
-                  backgroundColor: FitnessAppTheme.nearlyWhite,
+                  backgroundColor: HomeTheme.nearlyWhite,
                   backgroundImage: proPicProvider,
                 ),
               ),
@@ -357,7 +357,7 @@ class _ProfileHomeState extends State<ProfileHome>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 InkWell(
-                  splashColor: FitnessAppTheme.nearlyDarkBlue,
+                  splashColor: HomeTheme.nearlyDarkBlue,
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                   onTap: () async {
                     final imageUri = await getImage(ImageSource.camera);
@@ -368,7 +368,7 @@ class _ProfileHomeState extends State<ProfileHome>
                   ),
                 ),
                 InkWell(
-                  splashColor: FitnessAppTheme.nearlyDarkBlue,
+                  splashColor: HomeTheme.nearlyDarkBlue,
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                   onTap: () async {
                     try {

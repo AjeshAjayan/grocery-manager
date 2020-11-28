@@ -11,8 +11,8 @@ class LinearProgressBar extends StatelessWidget {
         return Container(
           child: SafeArea(
             child: value ? LinearProgressIndicator(
-              backgroundColor: FitnessAppTheme.nearlyDarkBlue,
-              valueColor: const AlwaysStoppedAnimation(FitnessAppTheme.nearlyWhite),
+              backgroundColor: HomeTheme.nearlyDarkBlue,
+              valueColor: const AlwaysStoppedAnimation(HomeTheme.nearlyWhite),
             ) : Container(),
           ),
         );

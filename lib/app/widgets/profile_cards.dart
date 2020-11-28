@@ -43,10 +43,10 @@ class _ProfileCardState extends State<ProfileCard> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: FitnessAppTheme.nearlyWhite,
+                  color: HomeTheme.nearlyWhite,
                   boxShadow: [
                     BoxShadow(
-                      color: FitnessAppTheme.grey.withOpacity(0.4),
+                      color: HomeTheme.grey.withOpacity(0.4),
                       offset: const Offset(1.1, 1.1),
                       blurRadius: 10.0,
                     ),
@@ -63,7 +63,7 @@ class _ProfileCardState extends State<ProfileCard> {
                       flex: 3,
                       child: Text(
                           widget.displayText,
-                          style: FitnessAppTheme.commonTextStyle
+                          style: HomeTheme.commonTextStyle
                       ),
                     )
                   ],

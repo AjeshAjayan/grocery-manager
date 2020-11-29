@@ -1,26 +1,29 @@
-
-
 import 'package:flutter/material.dart';
 
 import '../home_theme.dart';
 
 class BlueRightTopRoundedCard extends StatefulWidget {
-  BlueRightTopRoundedCard({this.child});
+  BlueRightTopRoundedCard({this.child, this.flex});
   final Widget child;
+  final int flex;
   @override
-  _BlueRightTopRoundedCardState createState() => _BlueRightTopRoundedCardState();
+  _BlueRightTopRoundedCardState createState() =>
+      _BlueRightTopRoundedCardState();
 }
 
 class _BlueRightTopRoundedCardState extends State<BlueRightTopRoundedCard> {
   @override
   Widget build(BuildContext context) {
     return Flexible(
-      flex: 1,
+      flex: widget.flex,
       child: Container(
         decoration: BoxDecoration(
           boxShadow: HomeTheme.boxShadow,
           gradient: LinearGradient(
-              colors: [HomeTheme.nearlyDarkBlue, HomeTheme.nearlyWhite],
+              colors: [
+                HomeTheme.nearlyDarkBlue,
+                HomeTheme.shadedDarkBlue.withGreen(150),
+              ],
               begin: Alignment.bottomLeft,
               end: Alignment.topRight,
               stops: [0.7, 1]),

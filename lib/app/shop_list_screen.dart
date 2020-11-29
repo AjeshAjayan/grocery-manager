@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:grocery_manager/app/home_theme.dart';
 import 'package:grocery_manager/app/models/user_model.dart';
-import 'package:grocery_manager/app/shop_details.dart';
+import 'package:grocery_manager/app/widgets/shop_details.dart';
 import 'package:grocery_manager/app/widgets/shop_card.dart';
 
 class ShopListScreen extends StatefulWidget {
@@ -282,13 +282,22 @@ class _ShopListScreenState extends State<ShopListScreen>
         shopCards.add(
           InkWell(
             onTap: () {
-              // show dialog
-              showDialog(
-                context: context,
-                child: AlertDialog(
-                  content: ShopDetails(),
-                ),
-              );
+
+              if(snapshots.connectionState == ConnectionState.done) {
+                // show dialog
+                showDialog(
+                  context: context,
+                  child: AlertDialog(
+                    backgroundColor: Colors.transparent,
+                    content: ShopDetails(
+                      shopDetails: doc.data() ?? '',
+                      docId: doc.id,
+                    ),
+                  ),
+                );
+              } else {
+                return;
+              }
             },
             splashColor: HomeTheme.primarySplashColor,
             child: ShopCard(
